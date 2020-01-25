@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "lib": [
+      "es6",
+      "ESNext",
+      "ESNext.Array",
+      "dom",
+      "DOM.ITERABLE"
+    ],
+    "rootDir": "src",
+    "moduleResolution": "node",
+    "target": "ESNext"
+  }
+}

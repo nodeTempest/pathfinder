@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#app {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100vw;
+  height: 100vh;
+  border: 3px solid black;
+}
+
+.cell {
+  border: 2px solid darkorange;
+}
+
+.obstacle {
+  background-color: black;
+}
+
+.head {
+  background-color: darkcyan;
+}
+
+.fringe {
+  background-color: darkred;
+}
+
+.closed {
+  background-color: darkgray;
+}

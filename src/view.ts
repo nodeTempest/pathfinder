@@ -5,25 +5,24 @@ import { Coords } from "./graph";
 export enum viewEvents {
   ADD_OBSTACLE = "ADD_OBSTACLE",
   REMOVE_OBSTACLE = "REMOVE_OBSTACLE",
-  SEARCH_START = "SEARCH_START"
+  SEARCH_START = "SEARCH_START",
+  MOVE_START_POINT = "MOVE_START_POINT",
+  MOVE_END_POINT = "MOVE_END_POINT"
 }
 
 export enum cellElems {
   obstacle = "obstacle",
   fringe = "fringe",
   closed = "closed",
-  head = "head"
-}
-
-export enum pressModes {
-  ADD,
-  REMOVE
+  head = "head",
+  startPoint = "start-point",
+  endPoint = "end-point"
 }
 
 class View {
   private readonly ee = new EventEmitter();
   private readonly root: HTMLDivElement;
-  private pressMode: pressModes;
+  private pressMode: viewEvents;
 
   constructor(private readonly width: number, private readonly height: number) {
     this.root = this.createElem("div", "graph-container") as HTMLDivElement;
@@ -60,14 +59,15 @@ class View {
     this.root.addEventListener("contextmenu", e => e.preventDefault());
 
     const mouseover = (e: MouseEvent) => {
-      if ((e.target as HTMLElement).closest(".cell")) {
-        const { x, y } = (e.target as HTMLDivElement).dataset;
-        const coords = new Coords(+x, +y);
+      const target = e.target as HTMLElement;
 
-        this.pressMode === pressModes.ADD
-          ? this.ee.emit(viewEvents.ADD_OBSTACLE, coords)
-          : this.ee.emit(viewEvents.REMOVE_OBSTACLE, coords);
+      if (!target.closest(".cell")) {
+        return;
       }
+      const { x, y } = target.dataset;
+      const coords = new Coords(+x, +y);
+
+      this.ee.emit(this.pressMode, coords);
     };
 
     const mouseup = (e: MouseEvent) => {
@@ -76,7 +76,21 @@ class View {
     };
 
     const mousedown = (e: MouseEvent) => {
-      this.pressMode = e.button === 0 ? pressModes.ADD : pressModes.REMOVE;
+      const target = e.target as HTMLElement;
+
+      if (!target.closest(".cell")) {
+        return;
+      }
+
+      if (target.classList.contains(cellElems.obstacle)) {
+        this.pressMode =
+          e.button === 0 ? viewEvents.ADD_OBSTACLE : viewEvents.REMOVE_OBSTACLE;
+      } else if (target.classList.contains(cellElems.startPoint)) {
+        this.pressMode = viewEvents.MOVE_START_POINT;
+      } else if (target.classList.contains(cellElems.endPoint)) {
+        this.pressMode = viewEvents.MOVE_END_POINT;
+      }
+
       this.root.addEventListener("mouseover", mouseover);
       this.root.addEventListener("mouseup", mouseup);
     };
@@ -117,6 +131,14 @@ class View {
 
   onSearchStart(fn: () => void) {
     this.ee.on(viewEvents.SEARCH_START, fn);
+  }
+
+  onMoveStartPoint(fn: (coords: Coords) => void) {
+    this.ee.on(viewEvents.MOVE_START_POINT, fn);
+  }
+
+  onMoveEndPoint(fn: (coords: Coords) => void) {
+    this.ee.on(viewEvents.MOVE_END_POINT, fn);
   }
 }
 

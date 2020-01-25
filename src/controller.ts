@@ -26,6 +26,14 @@ class Controller {
       this.pf.exec();
     });
 
+    this.view.onMoveStartPoint((coords: Coords) => {
+      this.pf.startPoint = coords;
+    });
+
+    this.view.onMoveEndPoint((coords: Coords) => {
+      this.pf.endPoint = coords;
+    });
+
     this.graph.onObstacleChange((coords: Coords) => {
       this.view.renderCellElem(cellElems.obstacle, coords);
     });
@@ -40,6 +48,14 @@ class Controller {
 
     this.pf.onHeadChange((vertex: Vertex) => {
       this.view.renderCellElem(cellElems.head, vertex.coords);
+    });
+
+    this.pf.onStartPointChange((coords: Coords) => {
+      this.view.renderCellElem(cellElems.startPoint, coords);
+    });
+
+    this.pf.onEndPointChange((coords: Coords) => {
+      this.view.renderCellElem(cellElems.endPoint, coords);
     });
   }
 }

@@ -93,21 +93,25 @@ class Pathfinder {
     return this._closed;
   }
 
-  private set startPoint(coords: Coords) {
-    this._startPoint = coords;
-    this.ee.emit(pfEvents.START_POINT_CHANGE, this._startPoint);
+  set startPoint(coords: Coords) {
+    if (!this.graph.containsObstacle(coords)) {
+      this._startPoint = coords;
+      this.ee.emit(pfEvents.START_POINT_CHANGE, this._startPoint);
+    }
   }
 
-  private get startPoint() {
+  get startPoint() {
     return this._startPoint;
   }
 
-  private set endPoint(coords: Coords) {
-    this._endPoint = coords;
-    this.ee.emit(pfEvents.END_POINT_CHANGE, this._endPoint);
+  set endPoint(coords: Coords) {
+    if (!this.graph.containsObstacle(coords)) {
+      this._endPoint = coords;
+      this.ee.emit(pfEvents.END_POINT_CHANGE, this._endPoint);
+    }
   }
 
-  private get endtPoint() {
+  get endtPoint() {
     return this._endPoint;
   }
 

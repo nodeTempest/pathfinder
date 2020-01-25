@@ -36,7 +36,7 @@ class Graph {
     return this._obstacles;
   }
 
-  private containsObstacle(coords: Coords): boolean {
+  containsObstacle(coords: Coords): boolean {
     return this.obstacles.some(o => o.equal(coords));
   }
 

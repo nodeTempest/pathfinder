@@ -31,3 +31,11 @@
 .closed {
   background-color: darkgray;
 }
+
+.start-point {
+  background-color: palegreen;
+}
+
+.end-point {
+  background-color: darkmagenta;
+}

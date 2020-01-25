@@ -3,7 +3,8 @@ import { EventEmitter } from "events";
 import { Coords } from "./graph";
 
 export enum viewEvents {
-  CELL_CLICK = "CELL_CLICK"
+  ADD_OBSTACLE = "ADD_OBSTACLE",
+  REMOVE_OBSTACLE = "REMOVE_OBSTACLE"
 }
 
 export enum cellElems {
@@ -13,9 +14,15 @@ export enum cellElems {
   head = "head"
 }
 
+export enum pressModes {
+  ADD,
+  REMOVE
+}
+
 class View {
   private readonly ee = new EventEmitter();
   private readonly root: HTMLDivElement;
+  private pressMode: pressModes;
 
   constructor(private readonly width: number, private readonly height: number) {
     this.root = this.createElem("div", "graph-container") as HTMLDivElement;
@@ -49,14 +56,31 @@ class View {
   }
 
   private initEvents() {
-    this.root.addEventListener("click", e => {
-      if ((e.target as HTMLElement).classList.contains("cell")) {
+    this.root.addEventListener("contextmenu", e => e.preventDefault());
+
+    const mouseover = (e: MouseEvent) => {
+      if ((e.target as HTMLElement).closest(".cell")) {
         const { x, y } = (e.target as HTMLDivElement).dataset;
         const coords = new Coords(+x, +y);
 
-        this.ee.emit(viewEvents.CELL_CLICK, coords);
+        this.pressMode === pressModes.ADD
+          ? this.ee.emit(viewEvents.ADD_OBSTACLE, coords)
+          : this.ee.emit(viewEvents.REMOVE_OBSTACLE, coords);
       }
-    });
+    };
+
+    const mouseup = (e: MouseEvent) => {
+      this.root.removeEventListener("mouseover", mouseover);
+      this.root.removeEventListener("mouseover", mouseup);
+    };
+
+    const mousedown = (e: MouseEvent) => {
+      this.pressMode = e.button === 0 ? pressModes.ADD : pressModes.REMOVE;
+      this.root.addEventListener("mouseover", mouseover);
+      this.root.addEventListener("mouseup", mouseup);
+    };
+
+    this.root.addEventListener("mousedown", mousedown);
   }
 
   private getCells(coords: Coords | Coords[]): HTMLDivElement[] {
@@ -76,8 +100,12 @@ class View {
     this.getCells(coords).forEach(elem => elem.classList.add(className));
   }
 
-  onCellClick(fn: (coords: Coords) => void) {
-    this.ee.on(viewEvents.CELL_CLICK, fn);
+  onAddObstacle(fn: (coords: Coords) => void) {
+    this.ee.on(viewEvents.ADD_OBSTACLE, fn);
+  }
+
+  onRemoveObstacle(fn: (coords: Coords) => void) {
+    this.ee.on(viewEvents.REMOVE_OBSTACLE, fn);
   }
 }
 

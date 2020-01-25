@@ -4,7 +4,8 @@ import { Coords } from "./graph";
 
 export enum viewEvents {
   ADD_OBSTACLE = "ADD_OBSTACLE",
-  REMOVE_OBSTACLE = "REMOVE_OBSTACLE"
+  REMOVE_OBSTACLE = "REMOVE_OBSTACLE",
+  SEARCH_START = "SEARCH_START"
 }
 
 export enum cellElems {
@@ -71,7 +72,7 @@ class View {
 
     const mouseup = (e: MouseEvent) => {
       this.root.removeEventListener("mouseover", mouseover);
-      this.root.removeEventListener("mouseover", mouseup);
+      this.root.removeEventListener("mouseup", mouseup);
     };
 
     const mousedown = (e: MouseEvent) => {
@@ -81,6 +82,12 @@ class View {
     };
 
     this.root.addEventListener("mousedown", mousedown);
+
+    document.addEventListener("keydown", e => {
+      if (e.code === "Space") {
+        this.ee.emit(viewEvents.SEARCH_START);
+      }
+    });
   }
 
   private getCells(coords: Coords | Coords[]): HTMLDivElement[] {
@@ -106,6 +113,10 @@ class View {
 
   onRemoveObstacle(fn: (coords: Coords) => void) {
     this.ee.on(viewEvents.REMOVE_OBSTACLE, fn);
+  }
+
+  onSearchStart(fn: () => void) {
+    this.ee.on(viewEvents.SEARCH_START, fn);
   }
 }
 

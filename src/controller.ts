@@ -14,23 +14,30 @@ class Controller {
   }
 
   initEvents() {
-    this.view.onCellClick((coords: Coords) => {
+    this.view.onAddObstacle((coords: Coords) => {
       this.graph.addObstacle(coords);
     });
+
+    this.view.onRemoveObstacle((coords: Coords) => {
+      this.graph.removeObstacle(coords);
+    });
+
+    this.view.onSearchStart(() => {
+      this.pf.exec();
+    });
+
     this.graph.onObstacleChange((coords: Coords) => {
       this.view.renderCellElem(cellElems.obstacle, coords);
     });
-    document.addEventListener("keydown", e => {
-      if (e.code === "Space") {
-        this.pf.exec();
-      }
-    });
+
     this.pf.onFringeChange((vertex: Vertex) => {
       this.view.renderCellElem(cellElems.fringe, vertex.coords);
     });
+
     this.pf.onClosedChange((vertex: Vertex) => {
       this.view.renderCellElem(cellElems.closed, vertex.coords);
     });
+
     this.pf.onHeadChange((vertex: Vertex) => {
       this.view.renderCellElem(cellElems.head, vertex.coords);
     });

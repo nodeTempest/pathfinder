@@ -13,7 +13,9 @@ export interface Vertex {
 export enum pfEvents {
   HEAD_CHANGE = "HEAD_CHANGE",
   CLOSED_CHANGE = "CLOSED_CHANGE",
-  FRINGE_CHANGE = "FRINGE_CHANGE"
+  FRINGE_CHANGE = "FRINGE_CHANGE",
+  START_POINT_CHANGE = "START_POINT_CHANGE",
+  END_POINT_CHANGE = "END_POINT_CHANGE"
 }
 
 class Pathfinder {
@@ -24,8 +26,8 @@ class Pathfinder {
 
   constructor(
     private readonly graph: Graph,
-    private readonly startPoint: Coords,
-    private readonly endPoint: Coords
+    private _startPoint: Coords,
+    private _endPoint: Coords
   ) {
     this.head = this.createVertex(this.startPoint);
     this.fringe = [this.head];
@@ -91,6 +93,24 @@ class Pathfinder {
     return this._closed;
   }
 
+  private set startPoint(coords: Coords) {
+    this._startPoint = coords;
+    this.ee.emit(pfEvents.START_POINT_CHANGE, this._startPoint);
+  }
+
+  private get startPoint() {
+    return this._startPoint;
+  }
+
+  private set endPoint(coords: Coords) {
+    this._endPoint = coords;
+    this.ee.emit(pfEvents.END_POINT_CHANGE, this._endPoint);
+  }
+
+  private get endtPoint() {
+    return this._endPoint;
+  }
+
   calcAdjacent() {
     const adjacentCoords = this.graph.getAdjacent(this.head.coords);
 
@@ -141,6 +161,14 @@ class Pathfinder {
 
   onClosedChange(fn: (vertex: Vertex) => void) {
     this.ee.on(pfEvents.CLOSED_CHANGE, fn);
+  }
+
+  onStartPointChange(fn: (coords: Coords) => void) {
+    this.ee.on(pfEvents.START_POINT_CHANGE, fn);
+  }
+
+  onEndPointChange(fn: (coords: Coords) => void) {
+    this.ee.on(pfEvents.END_POINT_CHANGE, fn);
   }
 }
 

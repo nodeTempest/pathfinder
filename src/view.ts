@@ -26,7 +26,7 @@ class View {
 
   constructor(private readonly width: number, private readonly height: number) {
     this.root = this.createElem("div", "graph-container") as HTMLDivElement;
-
+    console.log(this.root);
     this.generateHTML();
     this.initEvents();
   }

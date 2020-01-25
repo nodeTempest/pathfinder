@@ -4,4 +4,5 @@ import App from "./app";
 
 const appRoot = document.getElementById("app") as HTMLDivElement;
 
-new App(appRoot);
+const app = new App(appRoot);
+app.build();

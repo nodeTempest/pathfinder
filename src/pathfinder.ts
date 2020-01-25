@@ -23,12 +23,16 @@ class Pathfinder {
   private _fringe: Vertex[] = [];
   private _closed: Vertex[] = [];
   private _head: Vertex;
+  private _startPoint: Coords;
+  private _endPoint: Coords;
 
   constructor(
     private readonly graph: Graph,
-    private _startPoint: Coords,
-    private _endPoint: Coords
+    startPoint: Coords,
+    endPoint: Coords
   ) {
+    this.startPoint = startPoint;
+    this.endPoint = endPoint;
     this.head = this.createVertex(this.startPoint);
     this.fringe = [this.head];
   }
@@ -111,7 +115,7 @@ class Pathfinder {
     }
   }
 
-  get endtPoint() {
+  get endPoint() {
     return this._endPoint;
   }
 
@@ -147,8 +151,6 @@ class Pathfinder {
   }
 
   exec() {
-    console.log(this.head);
-    debugger;
     while (!this.head.coords.equal(this.endPoint)) {
       this.calcAdjacent();
       this.nextVertex();

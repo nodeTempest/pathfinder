@@ -27,12 +27,12 @@ class Graph {
     return x < 0 || x >= this.width || y < 0 || y >= this.height;
   }
 
-  private set obstacles(coords: Coords[]) {
+  set obstacles(coords: Coords[]) {
     this._obstacles = coords;
     this.ee.emit(graphEvents.OBSTACLES_CHANGE, this._obstacles);
   }
 
-  private get obstacles() {
+  get obstacles() {
     return this._obstacles;
   }
 

@@ -9,8 +9,9 @@ class Controller {
     private readonly view: View
   ) {
     this.initEvents();
-    this.view.renderCellElem(cellElems.head, new Coords(0, 0));
-    this.view.renderCellElem(cellElems.obstacle, new Coords(1, 0));
+    this.view.renderCellElem(cellElems.startPoint, this.pf.startPoint);
+    this.view.renderCellElem(cellElems.endPoint, this.pf.endPoint);
+    this.view.renderCellElem(cellElems.obstacle, this.graph.obstacles);
   }
 
   initEvents() {

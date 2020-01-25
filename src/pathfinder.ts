@@ -66,30 +66,30 @@ class Pathfinder {
     }
   }
 
-  private set head(vertex: Vertex) {
+  set head(vertex: Vertex) {
     this._head = vertex;
     this.ee.emit(pfEvents.HEAD_CHANGE, this._head);
   }
 
-  private get head() {
+  get head() {
     return this._head;
   }
 
-  private set fringe(vertexes: Vertex[]) {
+  set fringe(vertexes: Vertex[]) {
     this._fringe = vertexes;
     this.ee.emit(pfEvents.FRINGE_CHANGE, this._head);
   }
 
-  private get fringe() {
+  get fringe() {
     return this._fringe;
   }
 
-  private set closed(vertexes: Vertex[]) {
+  set closed(vertexes: Vertex[]) {
     this._closed = vertexes;
     this.ee.emit(pfEvents.CLOSED_CHANGE, this._closed);
   }
 
-  private get closed() {
+  get closed() {
     return this._closed;
   }
 

@@ -36,6 +36,10 @@ class Graph {
     return this._obstacles;
   }
 
+  private containsObstacle(coords: Coords): boolean {
+    return this.obstacles.some(o => o.equal(coords));
+  }
+
   getAdjacent({ x, y }: Coords): Coords[] {
     const up = new Coords(x, y - 1);
     const right = new Coords(x + 1, y);
@@ -47,10 +51,6 @@ class Graph {
       this.obstacles,
       (coords1, coords2) => coords1.equal(coords2)
     );
-  }
-
-  containsObstacle(coords: Coords): boolean {
-    return this.obstacles.some(o => o.equal(coords));
   }
 
   addObstacle(coords: Coords) {

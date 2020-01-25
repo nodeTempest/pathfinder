@@ -3,15 +3,36 @@ import Pathfinder from "./pathfinder";
 import View from "./view";
 import Controller from "./controller";
 
-const width = 5;
-const height = 5;
+interface AppOptions {
+  width?: number;
+  height?: number;
+  startPoint?: Coords;
+  endPoint?: Coords;
+}
 
-const A = new Coords(0, 0);
-const B = new Coords(2, 0);
+class App {
+  private readonly width: number;
+  private readonly height: number;
+  private readonly startPoint: Coords;
+  private readonly endPoint: Coords;
 
-const view = new View(width, height);
-const graph = new Graph(width, height);
-graph.addObstacle(new Coords(1, 0));
-const pf = new Pathfinder(graph, A, B);
+  constructor(private readonly app: HTMLDivElement, options: AppOptions = {}) {
+    this.width = options.width || 5;
+    this.height = options.height || 5;
+    this.startPoint = options.startPoint || new Coords(0, 0);
+    this.endPoint =
+      options.endPoint || new Coords(this.width - 1, this.height - 1);
+  }
 
-new Controller(graph, pf, view);
+  build() {
+    const view = new View(this.width, this.height);
+    this.app.append(view.root);
+
+    const graph = new Graph(this.width, this.height);
+    const pf = new Pathfinder(graph, this.startPoint, this.endPoint);
+
+    new Controller(graph, pf, view);
+  }
+}
+
+export default App;

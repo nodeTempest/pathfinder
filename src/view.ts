@@ -21,8 +21,8 @@ export enum cellElems {
 
 class View {
   private readonly ee = new EventEmitter();
-  private readonly root: HTMLDivElement;
   private pressMode: viewEvents;
+  readonly root: HTMLDivElement;
 
   constructor(private readonly width: number, private readonly height: number) {
     this.root = this.createElem("div", "graph-container") as HTMLDivElement;

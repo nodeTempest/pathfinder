@@ -26,7 +26,7 @@ class View {
 
   constructor(private readonly width: number, private readonly height: number) {
     this.root = this.createElem("div", "graph-container") as HTMLDivElement;
-    console.log(this.root);
+
     this.generateHTML();
     this.initEvents();
   }
@@ -112,7 +112,15 @@ class View {
     return this.cells.filter(elem => {
       const { x, y } = elem.dataset;
       const elemCoords = new Coords(+x, +y);
-      return (coords as Coords[]).some(c => c.equal(elemCoords));
+      return (coords as Coords[]).some(c => {
+        if (!c) {
+          console.log(this.cells);
+          console.log(elem);
+          console.log(coords);
+          return false;
+        }
+        return c.equal(elemCoords);
+      });
     });
   }
 

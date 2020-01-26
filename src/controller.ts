@@ -15,29 +15,17 @@ class Controller {
   }
 
   initEvents() {
-    this.view.onAddObstacle((coords: Coords) => {
-      this.graph.addObstacle(coords);
-    });
+    // this.view.onAddObstacle((coords: Coords) => {
+    //   this.graph.addObstacle(coords);
+    // });
 
-    this.view.onRemoveObstacle((coords: Coords) => {
-      this.graph.removeObstacle(coords);
-    });
+    // this.view.onRemoveObstacle((coords: Coords) => {
+    //   this.graph.removeObstacle(coords);
+    // });
 
-    this.view.onSearchStart(() => {
-      this.pf.exec();
-    });
-
-    this.view.onMoveStartPoint((coords: Coords) => {
-      this.pf.startPoint = coords;
-    });
-
-    this.view.onMoveEndPoint((coords: Coords) => {
-      this.pf.endPoint = coords;
-    });
-
-    this.graph.onObstacleChange((coords: Coords) => {
-      this.view.renderCellElem(cellElems.obstacle, coords);
-    });
+    // this.graph.onObstacleChange((coords: Coords) => {
+    //   this.view.renderCellElem(cellElems.obstacle, coords);
+    // });
 
     this.pf.onFringeChange((vertex: Vertex) => {
       this.view.renderCellElem(cellElems.fringe, vertex.coords);
@@ -48,7 +36,18 @@ class Controller {
     });
 
     this.pf.onHeadChange((vertex: Vertex) => {
+      if (!vertex.coords) {
+        debugger;
+      }
       this.view.renderCellElem(cellElems.head, vertex.coords);
+    });
+
+    this.view.onMoveStartPoint((coords: Coords) => {
+      this.pf.startPoint = coords;
+    });
+
+    this.view.onMoveEndPoint((coords: Coords) => {
+      this.pf.endPoint = coords;
     });
 
     this.pf.onStartPointChange((coords: Coords) => {
@@ -57,6 +56,10 @@ class Controller {
 
     this.pf.onEndPointChange((coords: Coords) => {
       this.view.renderCellElem(cellElems.endPoint, coords);
+    });
+
+    this.view.onSearchStart(() => {
+      this.pf.exec();
     });
   }
 }

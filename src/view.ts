@@ -29,6 +29,7 @@ class View {
 
     this.generateHTML();
     this.initEvents();
+    console.log(this.getCells(new Coords(1, 0)));
   }
 
   private createElem(tagName: string, className: string): HTMLElement {
@@ -105,27 +106,21 @@ class View {
   }
 
   private getCells(coords: Coords | Coords[]): HTMLDivElement[] {
-    if (!Array.isArray(coords)) {
-      coords = [coords];
-    }
+    coords = Array.isArray(coords) ? coords : [coords];
 
     return this.cells.filter(elem => {
+      console.log(coords);
       const { x, y } = elem.dataset;
       const elemCoords = new Coords(+x, +y);
-      return (coords as Coords[]).some(c => {
-        if (!c) {
-          console.log(this.cells);
-          console.log(elem);
-          console.log(coords);
-          return false;
-        }
-        return c.equal(elemCoords);
-      });
+      return (coords as Coords[]).some(c => c.equal(elemCoords));
     });
   }
 
   renderCellElem(className: cellElems, coords: Coords | Coords[]) {
     this.cells.forEach(elem => elem.classList.remove(className));
+    if (!coords) {
+      debugger;
+    }
     this.getCells(coords).forEach(elem => elem.classList.add(className));
   }
 

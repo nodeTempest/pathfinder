@@ -1,6 +1,7 @@
 import { EventEmitter } from "events";
 
 import Graph, { Coords } from "./graph";
+import { arrDiff } from "./utils";
 
 export interface Vertex {
   prev: Vertex | null;
@@ -34,7 +35,6 @@ class Pathfinder {
     this.startPoint = startPoint;
     this.endPoint = endPoint;
     this.head = this.createVertex(this.startPoint);
-    this.fringe = [this.head];
   }
 
   private createVertex(coords: Coords): Vertex {
@@ -72,6 +72,9 @@ class Pathfinder {
 
   set head(vertex: Vertex) {
     this._head = vertex;
+    if (!this._head) {
+      debugger;
+    }
     this.ee.emit(pfEvents.HEAD_CHANGE, this._head);
   }
 
@@ -120,7 +123,11 @@ class Pathfinder {
   }
 
   calcAdjacent() {
-    const adjacentCoords = this.graph.getAdjacent(this.head.coords);
+    const adjacentCoords = arrDiff(
+      this.graph.getAdjacent(this.head.coords),
+      this.closed.map(v => v.coords),
+      (c1, c2) => c1.equal(c2)
+    );
 
     adjacentCoords.forEach(adjCoords => {
       const vertex = this.fringe.find(v => v.coords.equal(adjCoords));
@@ -129,7 +136,7 @@ class Pathfinder {
         this.updateVertex(vertex);
       } else {
         const newVertex = this.createVertex(adjCoords);
-        this.fringe.push(newVertex);
+        this.fringe = [...this.fringe, newVertex];
       }
     });
   }
@@ -145,9 +152,16 @@ class Pathfinder {
       }
     });
 
-    this.fringe = this.fringe.filter(v => !v.coords.equal(this.head.coords));
-    this.closed = [...this.closed, this.head];
-    this.head = this.fringe[minIndex];
+    const nextHead = this.fringe[minIndex];
+
+    this.fringe = this.fringe.filter(v => !v.coords.equal(nextHead.coords));
+
+    this.head = nextHead;
+    if (!this.head.coords) {
+      debugger;
+    }
+
+    this.closed = [...this.closed, this.head.prev];
   }
 
   exec() {

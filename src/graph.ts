@@ -61,11 +61,11 @@ class Graph {
 
   removeObstacle(coords: Coords) {
     if (this.containsObstacle(coords)) {
-      this.obstacles = this.obstacles.filter(o => coords.equal(o));
+      this.obstacles = this.obstacles.filter(o => !coords.equal(o));
     }
   }
 
-  onObstacleChange(fn: (coords: Coords) => void) {
+  onObstacleChange(fn: (coords: Coords[]) => void) {
     this.ee.on(graphEvents.OBSTACLES_CHANGE, fn);
   }
 }

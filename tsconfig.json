@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ESNext",
     "jsx": "preserve",
     "esModuleInterop": true,
     "sourceMap": true,

@@ -70,7 +70,7 @@ class View {
       this.ee.emit(this.pressMode, coords);
     };
 
-    const mouseup = (e: MouseEvent) => {
+    const mouseup = () => {
       this.root.removeEventListener("mouseover", mouseover);
       this.root.removeEventListener("mouseup", mouseup);
     };
@@ -82,14 +82,19 @@ class View {
         return;
       }
 
-      if (target.classList.contains(cellElems.obstacle)) {
-        this.pressMode =
-          e.button === 0 ? viewEvents.ADD_OBSTACLE : viewEvents.REMOVE_OBSTACLE;
-      } else if (target.classList.contains(cellElems.startPoint)) {
+      if (target.classList.contains(cellElems.startPoint)) {
         this.pressMode = viewEvents.MOVE_START_POINT;
       } else if (target.classList.contains(cellElems.endPoint)) {
         this.pressMode = viewEvents.MOVE_END_POINT;
+      } else {
+        this.pressMode =
+          e.button === 0 ? viewEvents.ADD_OBSTACLE : viewEvents.REMOVE_OBSTACLE;
       }
+
+      const { x, y } = target.dataset;
+      const coords = new Coords(+x, +y);
+
+      this.ee.emit(this.pressMode, coords);
 
       this.root.addEventListener("mouseover", mouseover);
       this.root.addEventListener("mouseup", mouseup);
@@ -115,13 +120,7 @@ class View {
   }
 
   renderCellElem(className: cellElems, coords: Coords | Coords[]) {
-    if (!coords) {
-      debugger;
-    }
     this.cells.forEach(elem => elem.classList.remove(className));
-    if (!coords) {
-      debugger;
-    }
     this.getCells(coords).forEach(elem => elem.classList.add(className));
   }
 

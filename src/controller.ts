@@ -14,18 +14,18 @@ class Controller {
     this.view.renderCellElem(cellElems.obstacle, this.graph.obstacles);
   }
 
-  initEvents() {
-    // this.view.onAddObstacle((coords: Coords) => {
-    //   this.graph.addObstacle(coords);
-    // });
+  private initEvents() {
+    this.view.onAddObstacle((coords: Coords) => {
+      this.graph.addObstacle(coords);
+    });
 
-    // this.view.onRemoveObstacle((coords: Coords) => {
-    //   this.graph.removeObstacle(coords);
-    // });
+    this.view.onRemoveObstacle((coords: Coords) => {
+      this.graph.removeObstacle(coords);
+    });
 
-    // this.graph.onObstacleChange((coords: Coords) => {
-    //   this.view.renderCellElem(cellElems.obstacle, coords);
-    // });
+    this.graph.onObstacleChange((coords: Coords[]) => {
+      this.view.renderCellElem(cellElems.obstacle, coords);
+    });
 
     this.pf.onFringeChange((vertex: Vertex[]) => {
       this.view.renderCellElem(cellElems.fringe, vertex.map(v => v.coords));

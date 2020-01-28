@@ -69,6 +69,14 @@ class Pathfinder {
     }
   }
 
+  private collides(coords: Coords): boolean {
+    return (
+      this.graph.containsObstacle(coords) ||
+      (this.startPoint && this.startPoint.equal(coords)) ||
+      (this.endPoint && this.endPoint.equal(coords))
+    );
+  }
+
   set head(vertex: Vertex) {
     this._head = vertex;
     this.ee.emit(pfEvents.HEAD_CHANGE, this._head);
@@ -97,7 +105,7 @@ class Pathfinder {
   }
 
   set startPoint(coords: Coords) {
-    if (!this.graph.containsObstacle(coords)) {
+    if (!this.collides(coords)) {
       this._startPoint = coords;
       this.ee.emit(pfEvents.START_POINT_CHANGE, this._startPoint);
     }
@@ -108,7 +116,7 @@ class Pathfinder {
   }
 
   set endPoint(coords: Coords) {
-    if (!this.graph.containsObstacle(coords)) {
+    if (!this.collides(coords)) {
       this._endPoint = coords;
       this.ee.emit(pfEvents.END_POINT_CHANGE, this._endPoint);
     }

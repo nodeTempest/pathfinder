@@ -56,6 +56,14 @@ class View {
       }
     }
     this.root.append(this.container);
+
+    // make height equal to breadth
+    const minSide = Math.min(
+      this.container.offsetHeight,
+      this.container.offsetWidth
+    );
+    this.container.style.width = minSide + "px";
+    this.container.style.height = minSide + "px";
   }
 
   private get cells(): HTMLDivElement[] {

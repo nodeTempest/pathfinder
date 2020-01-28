@@ -27,18 +27,15 @@ class Controller {
     //   this.view.renderCellElem(cellElems.obstacle, coords);
     // });
 
-    this.pf.onFringeChange((vertex: Vertex) => {
-      this.view.renderCellElem(cellElems.fringe, vertex.coords);
+    this.pf.onFringeChange((vertex: Vertex[]) => {
+      this.view.renderCellElem(cellElems.fringe, vertex.map(v => v.coords));
     });
 
-    this.pf.onClosedChange((vertex: Vertex) => {
-      this.view.renderCellElem(cellElems.closed, vertex.coords);
+    this.pf.onClosedChange((vertex: Vertex[]) => {
+      this.view.renderCellElem(cellElems.closed, vertex.map(v => v.coords));
     });
 
     this.pf.onHeadChange((vertex: Vertex) => {
-      if (!vertex.coords) {
-        debugger;
-      }
       this.view.renderCellElem(cellElems.head, vertex.coords);
     });
 

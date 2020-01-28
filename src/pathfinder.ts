@@ -72,9 +72,6 @@ class Pathfinder {
 
   set head(vertex: Vertex) {
     this._head = vertex;
-    if (!this._head) {
-      debugger;
-    }
     this.ee.emit(pfEvents.HEAD_CHANGE, this._head);
   }
 
@@ -84,7 +81,7 @@ class Pathfinder {
 
   set fringe(vertexes: Vertex[]) {
     this._fringe = vertexes;
-    this.ee.emit(pfEvents.FRINGE_CHANGE, this._head);
+    this.ee.emit(pfEvents.FRINGE_CHANGE, this._fringe);
   }
 
   get fringe() {
@@ -157,9 +154,6 @@ class Pathfinder {
     this.fringe = this.fringe.filter(v => !v.coords.equal(nextHead.coords));
 
     this.head = nextHead;
-    if (!this.head.coords) {
-      debugger;
-    }
 
     this.closed = [...this.closed, this.head.prev];
   }
@@ -175,11 +169,11 @@ class Pathfinder {
     this.ee.on(pfEvents.HEAD_CHANGE, fn);
   }
 
-  onFringeChange(fn: (vertex: Vertex) => void) {
+  onFringeChange(fn: (vertex: Vertex[]) => void) {
     this.ee.on(pfEvents.FRINGE_CHANGE, fn);
   }
 
-  onClosedChange(fn: (vertex: Vertex) => void) {
+  onClosedChange(fn: (vertex: Vertex[]) => void) {
     this.ee.on(pfEvents.CLOSED_CHANGE, fn);
   }
 

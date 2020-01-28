@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-user-drag: none;
 }
 
 .graph-container {
@@ -15,7 +16,6 @@
 
 .cell {
   border: 2px solid darkorange;
-  -webkit-user-drag: none;
 }
 
 .obstacle {

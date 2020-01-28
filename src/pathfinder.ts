@@ -177,6 +177,17 @@ class Pathfinder {
     }
   }
 
+  *generate() {
+    yield;
+    this.initHead();
+    while (!this.head.coords.equal(this.endPoint)) {
+      yield;
+      this.calcAdjacent();
+      yield;
+      this.nextVertex();
+    }
+  }
+
   onHeadChange(fn: (vertex: Vertex) => void) {
     this.ee.on(pfEvents.HEAD_CHANGE, fn);
   }

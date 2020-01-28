@@ -2,6 +2,8 @@ import Graph, { Coords } from "./graph";
 import Pathfinder, { Vertex } from "./pathfinder";
 import View, { cellElems } from "./view";
 
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 class Controller {
   constructor(
     private readonly graph: Graph,
@@ -55,8 +57,14 @@ class Controller {
       this.view.renderCellElem(cellElems.endPoint, coords);
     });
 
-    this.view.onSearchStart(() => {
-      this.pf.exec();
+    this.view.onSearchStart(async () => {
+      const algorithm = this.pf.generate();
+      algorithm.next();
+      document.addEventListener("keydown", e => {
+        if (e.code !== "Space") {
+          algorithm.next();
+        }
+      });
     });
   }
 }

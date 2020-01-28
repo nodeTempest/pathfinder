@@ -22,11 +22,13 @@ export enum cellElems {
 class View {
   private readonly ee = new EventEmitter();
   private pressMode: viewEvents;
-  readonly root: HTMLDivElement;
+  private container: HTMLDivElement;
 
-  constructor(private readonly width: number, private readonly height: number) {
-    this.root = this.createElem("div", "graph-container") as HTMLDivElement;
-
+  constructor(
+    private root: HTMLDivElement,
+    private readonly width: number,
+    private readonly height: number
+  ) {
     this.generateHTML();
     this.initEvents();
   }
@@ -39,6 +41,10 @@ class View {
   }
 
   private generateHTML() {
+    this.container = this.createElem(
+      "div",
+      "graph-container"
+    ) as HTMLDivElement;
     for (let h = 0; h < this.height; h++) {
       for (let w = 0; w < this.width; w++) {
         const cell = this.createElem("div", "cell");
@@ -46,17 +52,18 @@ class View {
         cell.dataset.y = "" + h;
         cell.style.width = 100 / this.width + "%";
         cell.style.height = 100 / this.height + "%";
-        this.root.append(cell);
+        this.container.append(cell);
       }
     }
+    this.root.append(this.container);
   }
 
   private get cells(): HTMLDivElement[] {
-    return [...this.root.children] as HTMLDivElement[];
+    return [...this.container.children] as HTMLDivElement[];
   }
 
   private initEvents() {
-    this.root.addEventListener("contextmenu", e => e.preventDefault());
+    this.container.addEventListener("contextmenu", e => e.preventDefault());
 
     const mouseover = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -71,8 +78,8 @@ class View {
     };
 
     const mouseup = () => {
-      this.root.removeEventListener("mouseover", mouseover);
-      this.root.removeEventListener("mouseup", mouseup);
+      document.removeEventListener("mouseover", mouseover);
+      document.removeEventListener("mouseup", mouseup);
     };
 
     const mousedown = (e: MouseEvent) => {
@@ -96,11 +103,11 @@ class View {
 
       this.ee.emit(this.pressMode, coords);
 
-      this.root.addEventListener("mouseover", mouseover);
-      this.root.addEventListener("mouseup", mouseup);
+      document.addEventListener("mouseover", mouseover);
+      document.addEventListener("mouseup", mouseup);
     };
 
-    this.root.addEventListener("mousedown", mousedown);
+    document.addEventListener("mousedown", mousedown);
 
     document.addEventListener("keydown", e => {
       if (e.code === "Space") {

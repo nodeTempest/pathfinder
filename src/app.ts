@@ -20,12 +20,12 @@ class App {
     this.width = options.width || 5;
     this.height = options.height || 5;
     this.startPoint = options.startPoint || new Coords(0, 0);
-    this.endPoint = options.endPoint || new Coords(2, 0);
+    this.endPoint =
+      options.endPoint || new Coords(this.width - 1, this.height - 1);
   }
 
   build() {
-    const view = new View(this.width, this.height);
-    this.app.append(view.root);
+    const view = new View(this.app, this.width, this.height);
 
     const graph = new Graph(this.width, this.height);
     const pf = new Pathfinder(graph, this.startPoint, this.endPoint);

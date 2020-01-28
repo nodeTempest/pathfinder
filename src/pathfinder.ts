@@ -126,6 +126,10 @@ class Pathfinder {
     return this._endPoint;
   }
 
+  initHead() {
+    this.head = this.createVertex(this.startPoint);
+  }
+
   calcAdjacent() {
     const adjacentCoords = arrDiff(
       this.graph.getAdjacent(this.head.coords),
@@ -166,7 +170,7 @@ class Pathfinder {
   }
 
   exec() {
-    this.head = this.createVertex(this.startPoint);
+    this.initHead();
     while (!this.head.coords.equal(this.endPoint)) {
       this.calcAdjacent();
       this.nextVertex();

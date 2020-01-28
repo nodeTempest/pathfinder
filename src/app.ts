@@ -26,7 +26,6 @@ class App {
 
   build() {
     const view = new View(this.app, this.width, this.height);
-
     const graph = new Graph(this.width, this.height);
     const pf = new Pathfinder(graph, this.startPoint, this.endPoint);
 

@@ -15,6 +15,7 @@
 
 .cell {
   border: 2px solid darkorange;
+  -webkit-user-drag: none;
 }
 
 .obstacle {

@@ -34,7 +34,6 @@ class Pathfinder {
   ) {
     this.startPoint = startPoint;
     this.endPoint = endPoint;
-    this.head = this.createVertex(this.startPoint);
   }
 
   private createVertex(coords: Coords): Vertex {
@@ -159,6 +158,7 @@ class Pathfinder {
   }
 
   exec() {
+    this.head = this.createVertex(this.startPoint);
     while (!this.head.coords.equal(this.endPoint)) {
       this.calcAdjacent();
       this.nextVertex();

@@ -45,6 +45,7 @@ class View {
       "div",
       "graph-container"
     ) as HTMLDivElement;
+
     for (let h = 0; h < this.height; h++) {
       for (let w = 0; w < this.width; w++) {
         const cell = this.createElem("div", "cell");
@@ -55,6 +56,7 @@ class View {
         this.container.append(cell);
       }
     }
+
     this.root.append(this.container);
 
     // make height equal to breadth
@@ -64,10 +66,6 @@ class View {
     );
     this.container.style.width = minSide + "px";
     this.container.style.height = minSide + "px";
-  }
-
-  private get cells(): HTMLDivElement[] {
-    return [...this.container.children] as HTMLDivElement[];
   }
 
   private initEvents() {
@@ -122,6 +120,10 @@ class View {
         this.ee.emit(viewEvents.SEARCH_START);
       }
     });
+  }
+
+  private get cells(): HTMLDivElement[] {
+    return [...this.container.children] as HTMLDivElement[];
   }
 
   private getCells(coords: Coords | Coords[]): HTMLDivElement[] {

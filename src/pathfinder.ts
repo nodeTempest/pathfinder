@@ -38,7 +38,7 @@ class Pathfinder {
 
   private createVertex(coords: Coords): Vertex {
     const prev = this.head || null;
-    const distance = prev && prev.distance ? prev.distance + 1 : 0;
+    const distance = prev ? prev.distance + 1 : 0;
     const heuristic = this.calcHeuristic(coords);
 
     return {
@@ -64,8 +64,11 @@ class Pathfinder {
   }
 
   private updateVertex(vertex: Vertex) {
-    if (!this.isClosed(vertex)) {
-      vertex.distance = this.head.distance + 1;
+    const newDistance = this.head.distance + 1;
+
+    if (!this.isClosed(vertex) && newDistance < vertex.distance) {
+      vertex.distance = newDistance;
+      vertex.prev = this.head;
     }
   }
 

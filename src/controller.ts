@@ -65,6 +65,7 @@ class Controller {
       document.addEventListener("keydown", e => {
         if (e.code === "KeyR") {
           const { done } = algorithm.next();
+
           if (done) {
             this.graph.clear();
             this.pf.clear();

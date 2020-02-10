@@ -160,13 +160,9 @@ class Pathfinder {
       }
     });
 
-    const nextHead = this.fringe[minIndex];
-
-    this.fringe = this.fringe.filter(v => !v.coords.equal(nextHead.coords));
-
-    this.head = nextHead;
-
-    this.closed = [...this.closed, this.head.prev];
+    this.closed = [...this.closed, this.head];
+    this.head = this.fringe[minIndex];
+    this.fringe = this.fringe.filter(v => !v.coords.equal(this.head.coords));
   }
 
   exec() {

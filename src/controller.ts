@@ -57,11 +57,11 @@ class Controller {
       this.view.renderCellElem(cellElems.endPoint, coords);
     });
 
-    this.view.onSearchStart(async () => {
+    this.view.onSearchStart(() => {
       const algorithm = this.pf.generate();
       algorithm.next();
       document.addEventListener("keydown", e => {
-        if (e.code !== "Space") {
+        if (e.code === "KeyR") {
           algorithm.next();
         }
       });

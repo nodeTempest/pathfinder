@@ -63,7 +63,11 @@ class Controller {
       algorithm.next();
       document.addEventListener("keydown", e => {
         if (e.code === "KeyR") {
-          algorithm.next();
+          const { done } = algorithm.next();
+          if (done) {
+            this.graph.clear();
+            this.pf.clear();
+          }
         }
       });
       this.view.unblockEvents();

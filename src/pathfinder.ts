@@ -184,6 +184,11 @@ class Pathfinder {
     }
   }
 
+  clear() {
+    this.fringe = [];
+    this.closed = [];
+  }
+
   onHeadChange(fn: (vertex: Vertex) => void) {
     this.ee.on(pfEvents.HEAD_CHANGE, fn);
   }

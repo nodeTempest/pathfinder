@@ -68,6 +68,10 @@ class Graph {
   onObstacleChange(fn: (coords: Coords[]) => void) {
     this.ee.on(graphEvents.OBSTACLES_CHANGE, fn);
   }
+
+  clear() {
+    this.obstacles = [];
+  }
 }
 
 export default Graph;

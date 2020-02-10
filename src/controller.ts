@@ -58,6 +58,7 @@ class Controller {
     });
 
     this.view.onSearchStart(() => {
+      this.view.blockEvents();
       const algorithm = this.pf.generate();
       algorithm.next();
       document.addEventListener("keydown", e => {
@@ -65,6 +66,7 @@ class Controller {
           algorithm.next();
         }
       });
+      this.view.unblockEvents();
     });
   }
 }

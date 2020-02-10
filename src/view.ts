@@ -23,6 +23,7 @@ class View {
   private readonly ee = new EventEmitter();
   private pressMode: viewEvents;
   private container: HTMLDivElement;
+  private eventsBlocked: boolean = false;
 
   constructor(
     private root: HTMLDivElement,
@@ -142,23 +143,51 @@ class View {
   }
 
   onAddObstacle(fn: (coords: Coords) => void) {
-    this.ee.on(viewEvents.ADD_OBSTACLE, fn);
+    this.ee.on(viewEvents.ADD_OBSTACLE, (coords: Coords) => {
+      if (!this.eventsBlocked) {
+        fn(coords);
+      }
+    });
   }
 
   onRemoveObstacle(fn: (coords: Coords) => void) {
-    this.ee.on(viewEvents.REMOVE_OBSTACLE, fn);
+    this.ee.on(viewEvents.REMOVE_OBSTACLE, (coords: Coords) => {
+      if (!this.eventsBlocked) {
+        fn(coords);
+      }
+    });
   }
 
   onSearchStart(fn: () => void) {
-    this.ee.on(viewEvents.SEARCH_START, fn);
+    this.ee.on(viewEvents.SEARCH_START, () => {
+      if (!this.eventsBlocked) {
+        fn();
+      }
+    });
   }
 
   onMoveStartPoint(fn: (coords: Coords) => void) {
-    this.ee.on(viewEvents.MOVE_START_POINT, fn);
+    this.ee.on(viewEvents.MOVE_START_POINT, (coords: Coords) => {
+      if (!this.eventsBlocked) {
+        fn(coords);
+      }
+    });
   }
 
   onMoveEndPoint(fn: (coords: Coords) => void) {
-    this.ee.on(viewEvents.MOVE_END_POINT, fn);
+    this.ee.on(viewEvents.MOVE_END_POINT, (coords: Coords) => {
+      if (!this.eventsBlocked) {
+        fn(coords);
+      }
+    });
+  }
+
+  blockEvents() {
+    this.eventsBlocked = true;
+  }
+
+  unblockEvents() {
+    this.eventsBlocked = false;
   }
 }
 

@@ -129,7 +129,7 @@ class View {
     return [...this.container.children] as HTMLDivElement[];
   }
 
-  private getCells(coords: Coords | Coords[]): HTMLDivElement[] {
+  private cellsByCoords(coords: Coords | Coords[]): HTMLDivElement[] {
     coords = Array.isArray(coords) ? coords : [coords];
 
     return this.cells.filter(elem => {
@@ -142,7 +142,7 @@ class View {
   renderCellElem(className: cellElems, coords: Coords | Coords[] | null) {
     this.cells.forEach(elem => elem.classList.remove(className));
     if (coords) {
-      this.getCells(coords).forEach(elem => elem.classList.add(className));
+      this.cellsByCoords(coords).forEach(elem => elem.classList.add(className));
     }
   }
 

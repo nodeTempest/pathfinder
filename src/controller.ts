@@ -61,7 +61,7 @@ class Controller {
       this.view.blockEvents();
 
       const algorithm = this.pf.generate();
-      algorithm.next();
+
       document.addEventListener("keydown", e => {
         if (e.code === "KeyR") {
           const { done } = algorithm.next();

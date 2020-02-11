@@ -66,7 +66,7 @@ class Pathfinder {
   private updateVertex(vertex: Vertex) {
     const newDistance = this.head.distance + 1;
 
-    if (!this.isClosed(vertex) && newDistance < vertex.distance) {
+    if (newDistance < vertex.distance) {
       vertex.distance = newDistance;
       vertex.prev = this.head;
     }
@@ -177,7 +177,7 @@ class Pathfinder {
   }
 
   *generate() {
-    yield;
+    console.log(2);
     this.initHead();
     while (!this.head.coords.equal(this.endPoint)) {
       yield;

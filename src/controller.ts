@@ -61,25 +61,16 @@ class Controller {
       this.view.renderCellElem(cellElems.path, coords);
     });
 
-    this.view.onSearchStart(() => {
+    this.view.onSearchStart(async () => {
       this.view.blockEvents();
 
-      const algorithm = this.pf.stepByStep();
+      for (const _ of this.pf.stepByStep()) {
+        await delay(50);
+      }
 
-      const onKeyDown = (e: KeyboardEvent) => {
-        if (e.code === "KeyR") {
-          const { done } = algorithm.next();
-
-          if (done) {
-            this.graph.clear();
-            this.pf.clear();
-            this.view.unblockEvents();
-            document.removeEventListener("keydown", onKeyDown);
-          }
-        }
-      };
-
-      document.addEventListener("keydown", onKeyDown);
+      // this.graph.clear();
+      // this.pf.clear();
+      // this.view.unblockEvents();
     });
   }
 }

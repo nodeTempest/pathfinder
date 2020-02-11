@@ -70,6 +70,7 @@ class View {
   }
 
   private initEvents() {
+    this.root.addEventListener("dragstart", e => e.preventDefault());
     this.container.addEventListener("contextmenu", e => e.preventDefault());
 
     const mouseover = (e: MouseEvent) => {

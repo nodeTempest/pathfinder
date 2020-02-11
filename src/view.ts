@@ -139,9 +139,11 @@ class View {
     });
   }
 
-  renderCellElem(className: cellElems, coords: Coords | Coords[]) {
+  renderCellElem(className: cellElems, coords: Coords | Coords[] | null) {
     this.cells.forEach(elem => elem.classList.remove(className));
-    this.getCells(coords).forEach(elem => elem.classList.add(className));
+    if (coords) {
+      this.getCells(coords).forEach(elem => elem.classList.add(className));
+    }
   }
 
   onAddObstacle(fn: (coords: Coords) => void) {

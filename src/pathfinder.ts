@@ -24,7 +24,7 @@ class Pathfinder {
   private readonly ee = new EventEmitter();
   private _fringe: Vertex[] = [];
   private _closed: Vertex[] = [];
-  private _head: Vertex | null = null;
+  private _head: Vertex | null;
   private _startPoint: Coords;
   private _endPoint: Coords;
   private _path: Coords[] = [];
@@ -82,7 +82,7 @@ class Pathfinder {
     );
   }
 
-  set head(vertex: Vertex) {
+  set head(vertex: Vertex | null) {
     this._head = vertex;
     this.ee.emit(pfEvents.HEAD_CHANGE, this._head);
   }
@@ -195,7 +195,7 @@ class Pathfinder {
 
   *stepByStep() {
     this.initHead();
-
+    console.log(this.head);
     while (!this.head.coords.equal(this.endPoint)) {
       yield;
       this.calcAdjacent();
@@ -219,11 +219,11 @@ class Pathfinder {
   clear() {
     this.fringe = [];
     this.closed = [];
-    this._path = [];
+    this.path = [];
     this.head = null;
   }
 
-  onHeadChange(fn: (vertex: Vertex) => void) {
+  onHeadChange(fn: (vertex: Vertex | null) => void) {
     this.ee.on(pfEvents.HEAD_CHANGE, fn);
   }
 

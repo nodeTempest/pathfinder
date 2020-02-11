@@ -37,8 +37,8 @@ class Controller {
       this.view.renderCellElem(cellElems.closed, vertex.map(v => v.coords));
     });
 
-    this.pf.onHeadChange((vertex: Vertex) => {
-      this.view.renderCellElem(cellElems.head, vertex.coords);
+    this.pf.onHeadChange((vertex: Vertex | null) => {
+      this.view.renderCellElem(cellElems.head, vertex ? vertex.coords : null);
     });
 
     this.view.onMoveStartPoint((coords: Coords) => {
@@ -66,17 +66,20 @@ class Controller {
 
       const algorithm = this.pf.stepByStep();
 
-      document.addEventListener("keydown", e => {
+      const onKeyDown = (e: KeyboardEvent) => {
         if (e.code === "KeyR") {
           const { done } = algorithm.next();
 
           if (done) {
-            // this.graph.clear();
-            // this.pf.clear();
+            this.graph.clear();
+            this.pf.clear();
             this.view.unblockEvents();
+            document.removeEventListener("keydown", onKeyDown);
           }
         }
-      });
+      };
+
+      document.addEventListener("keydown", onKeyDown);
     });
   }
 }

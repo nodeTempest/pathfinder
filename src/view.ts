@@ -16,7 +16,8 @@ export enum cellElems {
   closed = "closed",
   head = "head",
   startPoint = "start-point",
-  endPoint = "end-point"
+  endPoint = "end-point",
+  path = "path"
 }
 
 class View {

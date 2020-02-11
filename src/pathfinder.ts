@@ -16,16 +16,18 @@ export enum pfEvents {
   CLOSED_CHANGE = "CLOSED_CHANGE",
   FRINGE_CHANGE = "FRINGE_CHANGE",
   START_POINT_CHANGE = "START_POINT_CHANGE",
-  END_POINT_CHANGE = "END_POINT_CHANGE"
+  END_POINT_CHANGE = "END_POINT_CHANGE",
+  PATH_CHANGE = "PATH_CHANGE"
 }
 
 class Pathfinder {
   private readonly ee = new EventEmitter();
   private _fringe: Vertex[] = [];
   private _closed: Vertex[] = [];
-  private _head: Vertex;
+  private _head: Vertex | null = null;
   private _startPoint: Coords;
   private _endPoint: Coords;
+  private _path: Coords[] = [];
 
   constructor(
     private readonly graph: Graph,
@@ -129,6 +131,15 @@ class Pathfinder {
     return this._endPoint;
   }
 
+  set path(coords: Coords[]) {
+    this._path = coords;
+    this.ee.emit(pfEvents.PATH_CHANGE, this._path);
+  }
+
+  get path() {
+    return this._path;
+  }
+
   initHead() {
     this.head = this.createVertex(this.startPoint);
   }
@@ -174,22 +185,42 @@ class Pathfinder {
       this.calcAdjacent();
       this.nextVertex();
     }
+
+    let temp = this.head;
+    do {
+      this.path = [temp.coords, ...this.path];
+      temp = temp.prev;
+    } while (temp.prev !== null);
   }
 
-  *generate() {
-    console.log(2);
+  *stepByStep() {
     this.initHead();
+
     while (!this.head.coords.equal(this.endPoint)) {
       yield;
       this.calcAdjacent();
       yield;
       this.nextVertex();
     }
+
+    let tempHead = this.head;
+    let tempContainer: Coords[] = [];
+    do {
+      tempContainer = [tempHead.coords, ...tempContainer];
+      tempHead = tempHead.prev;
+    } while (tempHead.prev !== null);
+
+    for (const coord of tempContainer) {
+      yield;
+      this.path = [...this.path, coord];
+    }
   }
 
   clear() {
     this.fringe = [];
     this.closed = [];
+    this._path = [];
+    this.head = null;
   }
 
   onHeadChange(fn: (vertex: Vertex) => void) {
@@ -210,6 +241,10 @@ class Pathfinder {
 
   onEndPointChange(fn: (coords: Coords) => void) {
     this.ee.on(pfEvents.END_POINT_CHANGE, fn);
+  }
+
+  onPathChange(fn: (coords: Coords[]) => void) {
+    this.ee.on(pfEvents.PATH_CHANGE, fn);
   }
 }
 

@@ -57,18 +57,22 @@ class Controller {
       this.view.renderCellElem(cellElems.endPoint, coords);
     });
 
+    this.pf.onPathChange((coords: Coords[]) => {
+      this.view.renderCellElem(cellElems.path, coords);
+    });
+
     this.view.onSearchStart(() => {
       this.view.blockEvents();
 
-      const algorithm = this.pf.generate();
+      const algorithm = this.pf.stepByStep();
 
       document.addEventListener("keydown", e => {
         if (e.code === "KeyR") {
           const { done } = algorithm.next();
 
           if (done) {
-            this.graph.clear();
-            this.pf.clear();
+            // this.graph.clear();
+            // this.pf.clear();
             this.view.unblockEvents();
           }
         }

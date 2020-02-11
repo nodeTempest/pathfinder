@@ -37,6 +37,10 @@
   background-color: darkgray;
 }
 
+.closed.path {
+  background-color: lightskyblue;
+}
+
 .start-point {
   background-color: palegreen;
 }

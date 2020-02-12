@@ -34,8 +34,8 @@ class Pathfinder {
     startPoint: Coords,
     endPoint: Coords
   ) {
-    this.startPoint = startPoint;
-    this.endPoint = endPoint;
+    this._startPoint = startPoint;
+    this._endPoint = endPoint;
   }
 
   private createVertex(coords: Coords): Vertex {
@@ -77,8 +77,8 @@ class Pathfinder {
   private collides(coords: Coords): boolean {
     return (
       this.graph.containsObstacle(coords) ||
-      (this.startPoint && this.startPoint.equal(coords)) ||
-      (this.endPoint && this.endPoint.equal(coords))
+      this.startPoint.equal(coords) ||
+      this.endPoint.equal(coords)
     );
   }
 

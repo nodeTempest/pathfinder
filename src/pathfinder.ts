@@ -49,10 +49,6 @@ class Pathfinder {
     };
   }
 
-  private isClosed(vertex: Vertex): boolean {
-    return this.closed.some(v => v.coords.equal(vertex.coords));
-  }
-
   private calcHeuristic(coords: Coords): number {
     return (
       Math.abs(this.endPoint.x - coords.x) +
@@ -163,8 +159,10 @@ class Pathfinder {
       let minPayload = Infinity;
       let minIndex = -1;
 
-      this.fringe.forEach((vertex, index) => {
-        if (vertex.payload < minPayload && !this.isClosed(vertex)) {
+      arrDiff(this.fringe, this.closed, (v1, v2) =>
+        v1.coords.equal(v2.coords)
+      ).forEach((vertex, index) => {
+        if (vertex.payload < minPayload) {
           minPayload = vertex.payload;
           minIndex = index;
         }

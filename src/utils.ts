@@ -8,3 +8,6 @@ export const arrDiff = <T>(
       acc.filter(valM => (compare ? !compare(valM, valS) : valM !== valS)),
     minuend
   );
+
+export const delay = (ms: number) =>
+  new Promise(resolve => setTimeout(resolve, ms));

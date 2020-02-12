@@ -1,8 +1,7 @@
 import Graph, { Coords } from "./graph";
 import Pathfinder, { Vertex } from "./pathfinder";
 import View, { cellElems } from "./view";
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { delay } from "./utils";
 
 class Controller {
   constructor(

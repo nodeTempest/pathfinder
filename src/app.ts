@@ -19,9 +19,15 @@ class App {
   constructor(private readonly app: HTMLDivElement, options: AppOptions = {}) {
     this.width = options.width || 5;
     this.height = options.height || 5;
-    this.startPoint = options.startPoint || new Coords(0, 0);
+    this.startPoint =
+      options.startPoint ||
+      new Coords(Math.round(this.width * 0.25), Math.round(this.height * 0.25));
     this.endPoint =
-      options.endPoint || new Coords(this.width - 1, this.height - 1);
+      options.endPoint ||
+      new Coords(
+        Math.round(this.width * 0.75) - 1,
+        Math.round(this.height * 0.75) - 1
+      );
   }
 
   build() {

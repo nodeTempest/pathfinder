@@ -60,7 +60,7 @@ class Controller {
     this.pf.onPathChange(async (coords: Coords[]) => {
       let i = 1;
       for (const _ of coords) {
-        await delay(50);
+        await delay(33);
         this.view.renderCellElem(cellElems.path, coords.slice(0, i));
         i++;
       }
@@ -70,7 +70,7 @@ class Controller {
       this.view.blockEvents();
 
       for (const _ of this.pf.findPath()) {
-        await delay(50);
+        await delay(33);
       }
 
       // this.graph.clear();

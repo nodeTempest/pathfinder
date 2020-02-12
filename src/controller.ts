@@ -57,14 +57,19 @@ class Controller {
       this.view.renderCellElem(cellElems.endPoint, coords);
     });
 
-    this.pf.onPathChange((coords: Coords[]) => {
-      this.view.renderCellElem(cellElems.path, coords);
+    this.pf.onPathChange(async (coords: Coords[]) => {
+      let i = 1;
+      for (const _ of coords) {
+        await delay(50);
+        this.view.renderCellElem(cellElems.path, coords.slice(0, i));
+        i++;
+      }
     });
 
     this.view.onSearchStart(async () => {
       this.view.blockEvents();
 
-      for (const _ of this.pf.stepByStep()) {
+      for (const _ of this.pf.findPath()) {
         await delay(50);
       }
 

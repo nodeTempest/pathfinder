@@ -24,7 +24,7 @@ class Pathfinder {
   private readonly ee = new EventEmitter();
   private _fringe: Vertex[] = [];
   private _closed: Vertex[] = [];
-  private _head: Vertex | null;
+  private _head: Vertex | null = null;
   private _startPoint: Coords;
   private _endPoint: Coords;
   private _path: Coords[] = [];
@@ -140,68 +140,51 @@ class Pathfinder {
     return this._path;
   }
 
-  initHead() {
+  *findPath() {
     this.head = this.createVertex(this.startPoint);
-  }
 
-  calcAdjacent() {
-    const adjacentCoords = arrDiff(
-      this.graph.getAdjacent(this.head.coords),
-      this.closed.map(v => v.coords),
-      (c1, c2) => c1.equal(c2)
-    );
-
-    adjacentCoords.forEach(adjCoords => {
-      const vertex = this.fringe.find(v => v.coords.equal(adjCoords));
-
-      if (vertex) {
-        this.updateVertex(vertex);
-      } else {
-        const newVertex = this.createVertex(adjCoords);
-        this.fringe = [...this.fringe, newVertex];
-      }
-    });
-  }
-
-  nextVertex() {
-    let minPayload = Infinity;
-    let minIndex = 0;
-
-    this.fringe.forEach((vertex, index) => {
-      if (vertex.payload < minPayload && !this.isClosed(vertex)) {
-        minPayload = vertex.payload;
-        minIndex = index;
-      }
-    });
-
-    this.closed = [...this.closed, this.head];
-    this.head = this.fringe[minIndex];
-    this.fringe = this.fringe.filter(v => !v.coords.equal(this.head.coords));
-  }
-
-  exec() {
-    this.initHead();
-    while (!this.head.coords.equal(this.endPoint)) {
-      this.calcAdjacent();
-      this.nextVertex();
-    }
-
-    let temp = this.head;
-    do {
-      this.path = [temp.coords, ...this.path];
-      temp = temp.prev;
-    } while (temp.prev !== null);
-  }
-
-  *stepByStep() {
-    this.initHead();
-    console.log(this.head);
     while (!this.head.coords.equal(this.endPoint)) {
       yield;
-      this.calcAdjacent();
+
+      const adjacentCoords = arrDiff(
+        this.graph.getAdjacent(this.head.coords),
+        this.closed.map(v => v.coords),
+        (c1, c2) => c1.equal(c2)
+      );
+
+      adjacentCoords.forEach(adjCoords => {
+        const vertex = this.fringe.find(v => v.coords.equal(adjCoords));
+
+        if (vertex) {
+          this.updateVertex(vertex);
+        } else {
+          const newVertex = this.createVertex(adjCoords);
+          this.fringe = [...this.fringe, newVertex];
+        }
+      });
+
       yield;
-      this.nextVertex();
+
+      let minPayload = Infinity;
+      let minIndex = -1;
+
+      this.fringe.forEach((vertex, index) => {
+        if (vertex.payload < minPayload && !this.isClosed(vertex)) {
+          minPayload = vertex.payload;
+          minIndex = index;
+        }
+      });
+
+      if (minIndex === -1) {
+        return;
+      }
+
+      this.closed = [...this.closed, this.head];
+      this.head = this.fringe[minIndex];
+      this.fringe = this.fringe.filter(v => !v.coords.equal(this.head.coords));
     }
+
+    yield;
 
     let tempHead = this.head;
     let tempContainer: Coords[] = [];
@@ -210,10 +193,7 @@ class Pathfinder {
       tempHead = tempHead.prev;
     } while (tempHead.prev !== null);
 
-    for (const coord of tempContainer) {
-      yield;
-      this.path = [...this.path, coord];
-    }
+    this.path = tempContainer;
   }
 
   clear() {

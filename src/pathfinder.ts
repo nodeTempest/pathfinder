@@ -25,18 +25,13 @@ class Pathfinder {
   private _fringe: Vertex[] = [];
   private _closed: Vertex[] = [];
   private _head: Vertex | null = null;
-  private _startPoint: Coords;
-  private _endPoint: Coords;
   private _path: Coords[] = [];
 
   constructor(
     private readonly graph: Graph,
-    startPoint: Coords,
-    endPoint: Coords
-  ) {
-    this._startPoint = startPoint;
-    this._endPoint = endPoint;
-  }
+    private _startPoint: Coords,
+    private _endPoint: Coords
+  ) {}
 
   private createVertex(coords: Coords): Vertex {
     const prev = this.head || null;

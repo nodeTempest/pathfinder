@@ -10,10 +10,10 @@ class Controller {
     private readonly pf: Pathfinder,
     private readonly view: View
   ) {
-    this.initEvents();
     this.view.renderCellElem(cellElems.startPoint, this.pf.startPoint);
     this.view.renderCellElem(cellElems.endPoint, this.pf.endPoint);
-    this.view.renderCellElem(cellElems.obstacle, this.graph.obstacles);
+
+    this.initEvents();
   }
 
   private initEvents() {

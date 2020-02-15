@@ -73,7 +73,7 @@ class View {
     this.root.append(this.container);
 
     this.aside = this.createElem("div", "aside") as HTMLDivElement;
-    const msg = this.createElem("h3", "message");
+    const msg = this.createElem("h2", "message");
     msg.innerHTML =
       "Press <b>Mouse Left</b> to add obstacle or <b>Mouse Right</b> to remove obstacle.</br>Use drag and drop to <b>move</b> start and destination points.";
     this.aside.append(msg);

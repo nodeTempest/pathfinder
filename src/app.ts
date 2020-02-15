@@ -1,6 +1,6 @@
 import Graph, { Coords } from "./graph";
 import Pathfinder from "./pathfinder";
-import View from "./view";
+import GraphView from "./graphView";
 import Controller from "./controller";
 import AsideView from "./asideView";
 
@@ -32,12 +32,12 @@ class App {
   }
 
   build() {
-    const view = new View(this.app, this.width, this.height);
+    const graphView = new GraphView(this.app, this.width, this.height);
     const asideView = new AsideView(this.app);
     const graph = new Graph(this.width, this.height);
     const pf = new Pathfinder(graph, this.startPoint, this.endPoint);
 
-    new Controller(graph, pf, view, asideView);
+    new Controller(graph, pf, graphView, asideView);
   }
 }
 

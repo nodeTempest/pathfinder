@@ -1,6 +1,6 @@
 import Graph, { Coords } from "./graph";
 import Pathfinder, { Vertex } from "./pathfinder";
-import View, { cellElems } from "./view";
+import GraphView, { cellElems } from "./graphView";
 import AsideView, { SearchModes } from "./asideView";
 import { delay } from "./utils";
 
@@ -8,7 +8,7 @@ class Controller {
   constructor(
     private readonly graph: Graph,
     private readonly pf: Pathfinder,
-    private readonly view: View,
+    private readonly view: GraphView,
     private readonly asideView: AsideView
   ) {
     this.view.renderCellElem(cellElems.startPoint, this.pf.startPoint);

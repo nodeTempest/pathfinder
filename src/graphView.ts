@@ -1,5 +1,6 @@
 import { EventEmitter } from "events";
 
+import View from "./view";
 import { Coords } from "./graph";
 
 export enum viewEvents {
@@ -21,7 +22,7 @@ export enum cellElems {
   path = "path"
 }
 
-class View {
+class GraphView extends View {
   private readonly ee = new EventEmitter();
   private eventsBlocked: boolean = false;
   private pressMode: viewEvents;
@@ -33,26 +34,20 @@ class View {
     private readonly width: number,
     private readonly height: number
   ) {
+    super();
     this.generateHTML();
     this.initEvents();
   }
 
-  private createElem(tagName: string, className: string): HTMLElement {
-    const elem = document.createElement(tagName);
-    elem.classList.add(className);
-
-    return elem;
-  }
-
-  private generateHTML() {
-    this.container = this.createElem(
+  protected generateHTML() {
+    this.container = View.createElem(
       "div",
       "graph-container"
     ) as HTMLDivElement;
 
     for (let h = 0; h < this.height; h++) {
       for (let w = 0; w < this.width; w++) {
-        const cell = this.createElem("div", "cell");
+        const cell = View.createElem("div", "cell");
         cell.dataset.x = "" + w;
         cell.dataset.y = "" + h;
         cell.style.width = 100 / this.width + "%";
@@ -72,7 +67,7 @@ class View {
     this.container.style.height = minSide + "px";
   }
 
-  private initEvents() {
+  protected initEvents() {
     this.root.addEventListener("dragstart", e => e.preventDefault());
     this.container.addEventListener("contextmenu", e => e.preventDefault());
 
@@ -187,4 +182,4 @@ class View {
   }
 }
 
-export default View;
+export default GraphView;

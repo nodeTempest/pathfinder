@@ -1,5 +1,7 @@
 import { EventEmitter } from "events";
 
+import View from "./view";
+
 export enum SearchModes {
   PREAPARING,
   IN_PROGRESS,
@@ -11,7 +13,7 @@ export enum asideViewEvents {
   NEW_SEARCH = "NEW_SEARCH"
 }
 
-class AsideView {
+class AsideView extends View {
   private readonly ee = new EventEmitter();
 
   private searchMode: SearchModes;
@@ -20,25 +22,19 @@ class AsideView {
   private searchButton: HTMLButtonElement;
 
   constructor(private root: HTMLDivElement) {
+    super();
     this.generateHTML();
     this.initEvents();
   }
 
-  private createElem(tagName: string, className: string): HTMLElement {
-    const elem = document.createElement(tagName);
-    elem.classList.add(className);
-
-    return elem;
-  }
-
   generateHTML() {
-    this.aside = this.createElem("div", "aside") as HTMLDivElement;
-    const msg = this.createElem("h2", "message");
+    this.aside = View.createElem("div", "aside") as HTMLDivElement;
+    const msg = View.createElem("h2", "message");
     msg.innerHTML =
       "Press <b>Mouse Left</b> to add obstacle or <b>Mouse Right</b> to remove obstacle.</br>Use drag and drop to <b>move</b> start and destination points.";
     this.aside.append(msg);
 
-    this.searchButton = this.createElem(
+    this.searchButton = View.createElem(
       "button",
       "search-button"
     ) as HTMLButtonElement;

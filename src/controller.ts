@@ -1,6 +1,6 @@
 import Graph, { Coords } from "./graph";
 import Pathfinder, { Vertex } from "./pathfinder";
-import View, { cellElems } from "./view";
+import View, { cellElems, SearchModes } from "./view";
 import { delay } from "./utils";
 
 class Controller {
@@ -11,6 +11,7 @@ class Controller {
   ) {
     this.view.renderCellElem(cellElems.startPoint, this.pf.startPoint);
     this.view.renderCellElem(cellElems.endPoint, this.pf.endPoint);
+    this.view.setSearchMode(SearchModes.PREAPARING);
 
     this.initEvents();
   }
@@ -57,24 +58,33 @@ class Controller {
     });
 
     this.pf.onPathChange(async (coords: Coords[]) => {
-      let i = 1;
-      for (const _ of coords) {
-        await delay(33);
-        this.view.renderCellElem(cellElems.path, coords.slice(0, i));
-        i++;
+      if (!coords.length) {
+        this.view.renderCellElem(cellElems.path, null);
+      } else {
+        let i = 1;
+        for (const _ of coords) {
+          await delay(33);
+          this.view.renderCellElem(cellElems.path, coords.slice(0, i));
+          i++;
+        }
+        this.view.setSearchMode(SearchModes.WAITING_FOR_NEW);
       }
     });
 
     this.view.onSearchStart(async () => {
       this.view.blockEvents();
+      this.view.setSearchMode(SearchModes.IN_PROGRESS);
 
       for (const _ of this.pf.findPath()) {
         await delay(33);
       }
+    });
 
-      // this.graph.clear();
-      // this.pf.clear();
-      // this.view.unblockEvents();
+    this.view.onNewSearch(() => {
+      this.graph.clear();
+      this.pf.clear();
+      this.view.unblockEvents();
+      this.view.setSearchMode(SearchModes.PREAPARING);
     });
   }
 }

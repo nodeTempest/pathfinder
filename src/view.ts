@@ -2,10 +2,17 @@ import { EventEmitter } from "events";
 
 import { Coords } from "./graph";
 
+export enum SearchModes {
+  PREAPARING,
+  IN_PROGRESS,
+  WAITING_FOR_NEW
+}
+
 export enum viewEvents {
   ADD_OBSTACLE = "ADD_OBSTACLE",
   REMOVE_OBSTACLE = "REMOVE_OBSTACLE",
   SEARCH_START = "SEARCH_START",
+  NEW_SEARCH = "NEW_SEARCH",
   MOVE_START_POINT = "MOVE_START_POINT",
   MOVE_END_POINT = "MOVE_END_POINT"
 }
@@ -22,9 +29,13 @@ export enum cellElems {
 
 class View {
   private readonly ee = new EventEmitter();
-  private pressMode: viewEvents;
-  private container: HTMLDivElement;
   private eventsBlocked: boolean = false;
+  private pressMode: viewEvents;
+  private searchMode: SearchModes;
+
+  private container: HTMLDivElement;
+  private aside: HTMLDivElement;
+  private searchButton: HTMLButtonElement;
 
   constructor(
     private root: HTMLDivElement,
@@ -60,6 +71,19 @@ class View {
     }
 
     this.root.append(this.container);
+
+    this.aside = this.createElem("div", "aside") as HTMLDivElement;
+    const msg = this.createElem("h3", "message");
+    msg.innerHTML =
+      "Press <b>Mouse Left</b> to add obstacle or <b>Mouse Right</b> to remove obstacle.</br>Use drag and drop to <b>move</b> start and destination points.";
+    this.aside.append(msg);
+
+    this.searchButton = this.createElem(
+      "button",
+      "search-button"
+    ) as HTMLButtonElement;
+    this.aside.append(this.searchButton);
+    this.root.append(this.aside);
 
     // make height equal to breadth
     const minSide = Math.min(
@@ -118,11 +142,32 @@ class View {
 
     document.addEventListener("mousedown", mousedown);
 
-    document.addEventListener("keydown", e => {
-      if (e.code === "Space") {
+    this.searchButton.addEventListener("click", () => {
+      if (this.searchMode === SearchModes.PREAPARING) {
         this.ee.emit(viewEvents.SEARCH_START);
+      } else if (this.searchMode === SearchModes.WAITING_FOR_NEW) {
+        this.ee.emit(viewEvents.NEW_SEARCH);
       }
     });
+  }
+
+  setSearchMode(mode: SearchModes) {
+    this.searchMode = mode;
+
+    switch (this.searchMode) {
+      case SearchModes.PREAPARING:
+        this.searchButton.textContent = "Start Search";
+        this.searchButton.disabled = false;
+        break;
+      case SearchModes.IN_PROGRESS:
+        this.searchButton.textContent = "Searching...";
+        this.searchButton.disabled = true;
+        break;
+      case SearchModes.WAITING_FOR_NEW:
+        this.searchButton.textContent = "New Search";
+        this.searchButton.disabled = false;
+        break;
+    }
   }
 
   private get cells(): HTMLDivElement[] {
@@ -168,6 +213,10 @@ class View {
         fn();
       }
     });
+  }
+
+  onNewSearch(fn: () => void) {
+    this.ee.on(viewEvents.NEW_SEARCH, fn);
   }
 
   onMoveStartPoint(fn: (coords: Coords) => void) {

@@ -4,25 +4,30 @@
   box-sizing: border-box;
 }
 
+b {
+  color: rgb(34, 61, 212);
+}
+
 .graph-container {
   display: flex;
   flex-wrap: wrap;
   width: 100vw;
   height: 100vh;
-  border: 3px solid black;
   width: 80%;
+  float: left;
+  border: 3px solid rgb(53, 47, 70);
 }
 
 .cell {
-  border: 2px solid darkorange;
+  border: 2px solid gray;
 }
 
 .obstacle {
-  background-color: black;
+  background-color: rgb(24, 25, 26);
 }
 
 .head {
-  background-color: darkcyan;
+  background-color: rgb(240, 225, 17);
 }
 
 .start-point.head {
@@ -30,21 +35,36 @@
 }
 
 .fringe {
-  background-color: darkred;
+  background-color: rgb(81, 104, 236);
 }
 
 .closed {
-  background-color: darkgray;
+  background-color: rgb(145, 216, 216);
 }
 
 .closed.path {
-  background-color: lightskyblue;
+  background-color: rgba(209, 119, 16, 0.918);
 }
 
 .start-point {
-  background-color: palegreen;
+  background-color: rgb(75, 230, 75);
 }
 
 .end-point {
-  background-color: darkmagenta;
+  background-color: rgba(216, 11, 154, 0.829);
+}
+
+.aside {
+  width: 18%;
+  float: left;
+  padding: 0.5rem;
+}
+
+.message {
+  margin-bottom: 2rem;
+}
+
+.search-button {
+  padding: 1rem;
+  font-size: 1rem;
 }

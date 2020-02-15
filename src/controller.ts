@@ -57,7 +57,7 @@ class Controller {
       this.view.renderCellElem(cellElems.endPoint, coords);
     });
 
-    this.pf.onPathChange(async (coords: Coords[]) => {
+    this.pf.onSuccess(async (coords: Coords[]) => {
       if (!coords.length) {
         this.view.renderCellElem(cellElems.path, null);
       } else {
@@ -69,6 +69,12 @@ class Controller {
         }
         this.view.setSearchMode(SearchModes.WAITING_FOR_NEW);
       }
+    });
+
+    this.pf.onFail(() => {
+      this.view.showFailMsg();
+      this.view.renderCellElem(cellElems.path, null);
+      this.view.setSearchMode(SearchModes.WAITING_FOR_NEW);
     });
 
     this.view.onSearchStart(async () => {

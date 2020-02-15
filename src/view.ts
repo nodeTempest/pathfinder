@@ -242,6 +242,10 @@ class View {
   unblockEvents() {
     this.eventsBlocked = false;
   }
+
+  showFailMsg() {
+    alert("No path found");
+  }
 }
 
 export default View;

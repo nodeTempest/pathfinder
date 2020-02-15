@@ -168,11 +168,12 @@ class Pathfinder {
         }
       });
 
+      this.closed = [...this.closed, this.head];
+
       if (minIndex === -1) {
         return;
       }
 
-      this.closed = [...this.closed, this.head];
       this.head = this.fringe[minIndex];
       this.fringe = this.fringe.filter(v => !v.coords.equal(this.head.coords));
     }

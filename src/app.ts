@@ -2,6 +2,7 @@ import Graph, { Coords } from "./graph";
 import Pathfinder from "./pathfinder";
 import View from "./view";
 import Controller from "./controller";
+import AsideView from "./asideView";
 
 interface AppOptions {
   width?: number;
@@ -32,10 +33,11 @@ class App {
 
   build() {
     const view = new View(this.app, this.width, this.height);
+    const asideView = new AsideView(this.app);
     const graph = new Graph(this.width, this.height);
     const pf = new Pathfinder(graph, this.startPoint, this.endPoint);
 
-    new Controller(graph, pf, view);
+    new Controller(graph, pf, view, asideView);
   }
 }
 

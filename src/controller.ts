@@ -1,17 +1,19 @@
 import Graph, { Coords } from "./graph";
 import Pathfinder, { Vertex } from "./pathfinder";
-import View, { cellElems, SearchModes } from "./view";
+import View, { cellElems } from "./view";
+import AsideView, { SearchModes } from "./asideView";
 import { delay } from "./utils";
 
 class Controller {
   constructor(
     private readonly graph: Graph,
     private readonly pf: Pathfinder,
-    private readonly view: View
+    private readonly view: View,
+    private readonly asideView: AsideView
   ) {
     this.view.renderCellElem(cellElems.startPoint, this.pf.startPoint);
     this.view.renderCellElem(cellElems.endPoint, this.pf.endPoint);
-    this.view.setSearchMode(SearchModes.PREAPARING);
+    this.asideView.setSearchMode(SearchModes.PREAPARING);
 
     this.initEvents();
   }
@@ -67,30 +69,30 @@ class Controller {
           this.view.renderCellElem(cellElems.path, coords.slice(0, i));
           i++;
         }
-        this.view.setSearchMode(SearchModes.WAITING_FOR_NEW);
+        this.asideView.setSearchMode(SearchModes.WAITING_FOR_NEW);
       }
     });
 
     this.pf.onFail(() => {
       this.view.showFailMsg();
       this.view.renderCellElem(cellElems.path, null);
-      this.view.setSearchMode(SearchModes.WAITING_FOR_NEW);
+      this.asideView.setSearchMode(SearchModes.WAITING_FOR_NEW);
     });
 
-    this.view.onSearchStart(async () => {
+    this.asideView.onSearchStart(async () => {
       this.view.blockEvents();
-      this.view.setSearchMode(SearchModes.IN_PROGRESS);
+      this.asideView.setSearchMode(SearchModes.IN_PROGRESS);
 
       for (const _ of this.pf.findPath()) {
         await delay(33);
       }
     });
 
-    this.view.onNewSearch(() => {
+    this.asideView.onNewSearch(() => {
       this.graph.clear();
       this.pf.clear();
       this.view.unblockEvents();
-      this.view.setSearchMode(SearchModes.PREAPARING);
+      this.asideView.setSearchMode(SearchModes.PREAPARING);
     });
   }
 }

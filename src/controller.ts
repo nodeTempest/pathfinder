@@ -57,7 +57,7 @@ class Controller {
       this.view.renderCellElem(cellElems.endPoint, coords);
     });
 
-    this.pf.onSuccess(async (coords: Coords[]) => {
+    this.pf.onPathChange(async (coords: Coords[]) => {
       if (!coords.length) {
         this.view.renderCellElem(cellElems.path, null);
       } else {

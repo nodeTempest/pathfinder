@@ -17,7 +17,7 @@ export enum pfEvents {
   FRINGE_CHANGE = "FRINGE_CHANGE",
   START_POINT_CHANGE = "START_POINT_CHANGE",
   END_POINT_CHANGE = "END_POINT_CHANGE",
-  SUCESS = "SUCESS",
+  PATH_CHANGE = "PATH_CHANGE",
   FAIL = "FAIL"
 }
 
@@ -125,7 +125,7 @@ class Pathfinder {
 
   set path(coords: Coords[]) {
     this._path = coords;
-    this.ee.emit(pfEvents.SUCESS, this._path);
+    this.ee.emit(pfEvents.PATH_CHANGE, this._path);
   }
 
   get path() {
@@ -219,8 +219,8 @@ class Pathfinder {
     this.ee.on(pfEvents.END_POINT_CHANGE, fn);
   }
 
-  onSuccess(fn: (coords: Coords[]) => void) {
-    this.ee.on(pfEvents.SUCESS, fn);
+  onPathChange(fn: (coords: Coords[]) => void) {
+    this.ee.on(pfEvents.PATH_CHANGE, fn);
   }
 
   onFail(fn: () => void) {

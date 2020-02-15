@@ -31,11 +31,11 @@ b {
 }
 
 .start-point.head {
-  background-color: darkcyan;
+  background-color: rgb(240, 225, 17);
 }
 
 .fringe {
-  background-color: rgb(81, 104, 236);
+  background-color: rgb(71, 94, 226);
 }
 
 .closed {
@@ -47,11 +47,11 @@ b {
 }
 
 .start-point {
-  background-color: rgb(75, 230, 75);
+  background-color: rgb(5, 129, 11);
 }
 
 .end-point {
-  background-color: rgba(216, 11, 154, 0.829);
+  background-color: rgba(185, 9, 133, 0.89);
 }
 
 .aside {

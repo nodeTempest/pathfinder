@@ -31,7 +31,7 @@ class AsideView extends View {
     this.aside = View.createElem("div", "aside") as HTMLDivElement;
     const msg = View.createElem("h2", "message");
     msg.innerHTML =
-      "Press <b>Mouse Left</b> to add obstacle or <b>Mouse Right</b> to remove obstacle.</br>Use drag and drop to <b>move</b> start and destination points.";
+      "Press <b>Mouse Left</b> to add obstacle or <b>Mouse Right</b> to remove obstacle.</br>Use <b>drag and drop</b> to <b>move</b> start and destination points.";
     this.aside.append(msg);
 
     this.searchButton = View.createElem(
